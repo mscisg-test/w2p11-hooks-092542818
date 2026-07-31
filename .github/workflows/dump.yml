@@ -1,0 +1,21 @@
+name: event-dump
+on:
+  release:
+    types: [created, published, released, prereleased, edited, deleted, unpublished]
+  push:
+  create:
+  delete:
+  registry_package:
+    types: [published, updated]
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: dump
+        run: |
+          echo "CAPTURE|event_name=${{ github.event_name }}"
+          echo "CAPTURE|action=${{ github.event.action }}"
+          echo "CAPTURE|ref=${{ github.ref }} ref_type=${{ github.ref_type }}"
+          echo '---GITHUB_EVENT_BEGIN---'
+          cat "$GITHUB_EVENT_PATH"
+          echo '---GITHUB_EVENT_END---'
